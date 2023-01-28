@@ -1,3 +1,4 @@
 rootProject.name = 'KafkaProj-01'
 include 'Producers'
+include 'consumers'
 
