@@ -34,7 +34,11 @@ public class SimpleConsumer {
         consumer.subscribe(List.of(topic));
 
         while (true) {
-            // 1초 대기 후 batch 단위의 레코드들을 polling.
+            // polling 시작.
+            // 1. heart beat thread 생성.
+            // 2. 브로커와 메타데이터 주고받음.
+            // 3. linked queue 비어있으면 1초 동안 ConsumerNetworkClient 가 반복해서 메세지 긁어오고 linked queue 에 채워넣음.
+            // 4. ConsumerNetworkClient 가 linked queue 에 채워넣은 메세지를 fetcher 가 가져감. (poll() 코드 참고.)
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
             for (ConsumerRecord record: records) {
                 logger.info("record_key:{}, record_value:{}, partition:{}", record.key(), record.value(), record.partition());
