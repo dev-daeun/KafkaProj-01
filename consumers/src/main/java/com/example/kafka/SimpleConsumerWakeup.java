@@ -19,12 +19,14 @@ public class SimpleConsumerWakeup {
     public static final Logger logger = LoggerFactory.getLogger(SimpleConsumer.class.getName());
 
     public static void main(String[] args) {
-        String topic = "simple-topic";
+        // SimpleProducerWithModuloPartitioner 에서 생산하는 메세지 소비.
+        String topic = "topic-with-five-partitions";
 
         Properties props = new Properties();
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         // consumer group identifier 설정
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
@@ -48,9 +50,9 @@ public class SimpleConsumerWakeup {
         // shutdown kafka consumption gracefully...
         try {
             while (true) {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(10000));
                 for (ConsumerRecord record: records) {
-                    logger.info("record_key:{}, record_value:{}, partition:{}", record.key(), record.value(), record.partition());
+                    logger.info("record_key:{}, record_value:{}, partition:{}, record's offset:{}", record.key(), record.value(), record.partition(), record.offset());
                 }
             }
         } catch (WakeupException e) {
