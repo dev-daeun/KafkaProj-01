@@ -39,6 +39,11 @@ public class SimpleProducerWithCustomPartitioner {
 
         // 메세지 여러개 생성하기
         for (int seq = 0; seq < 20; seq++) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, String.valueOf(seq), "this-is-" + String.valueOf(seq));
             producer.send(record, (RecordMetadata recordMetadata, Exception exception) -> {
                 if (exception == null) {
