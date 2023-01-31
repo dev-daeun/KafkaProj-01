@@ -5,13 +5,15 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Properties;
 
 
 public class SimpleProducerWithCustomPartitioner {
-//    public static final Logger  logger = LoggerFactory.getLogger(SimpleProducerAsync.class.getName());
+    public static final Logger logger = LoggerFactory.getLogger(SimpleProducerAsync.class.getName());
 
     public static void main(String[] args) {
         // KafkaProducer configuration settings
@@ -39,12 +41,12 @@ public class SimpleProducerWithCustomPartitioner {
         for (int seq = 0; seq < 20; seq++) {
             ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, String.valueOf(seq), "this-is-" + String.valueOf(seq));
             producer.send(record, (RecordMetadata recordMetadata, Exception exception) -> {
-//                if (exception == null) {
-//                    System.out.println("### record metadata received ### \n" +
-//                            "partition: " + recordMetadata.partition() + "\n" +
-//                            "offset: " + recordMetadata.offset() + "\n" +
-//                            "timestamp: " + recordMetadata.timestamp());
-//                }
+                if (exception == null) {
+                    System.out.println("### record metadata received ### \n" +
+                            "partition: " + recordMetadata.partition() + "\n" +
+                            "offset: " + recordMetadata.offset() + "\n" +
+                            "timestamp: " + recordMetadata.timestamp());
+                }
                 if (exception != null) {
                     System.out.println("exception from broker: " + exception.getMessage());
                 }
