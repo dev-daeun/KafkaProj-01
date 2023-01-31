@@ -29,7 +29,7 @@ public class SimpleConsumerWakeup {
         props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         // consumer group identifier 설정
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group-01");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
