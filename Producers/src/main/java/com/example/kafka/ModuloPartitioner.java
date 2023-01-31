@@ -5,12 +5,16 @@ import org.apache.kafka.common.Cluster;
 import org.apache.kafka.common.InvalidRecordException;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 
 
 public class ModuloPartitioner implements Partitioner {
+    public static final Logger logger = LoggerFactory.getLogger(ModuloPartitioner.class.getName());
+
     @Override
     // keyBytes: 직렬화된 키 값
     // valueBytes: 직렬화된 밸류 값
@@ -27,7 +31,7 @@ public class ModuloPartitioner implements Partitioner {
 
         int partitionIndex = Integer.parseInt(key.toString()) % partitionsAmount;
 
-        System.out.println("key " + key.toString() + " is sent to partition " + partitionIndex);
+        logger.info("key " + key.toString() + " is sent to partition " + partitionIndex);
 
         return partitionIndex;
     }

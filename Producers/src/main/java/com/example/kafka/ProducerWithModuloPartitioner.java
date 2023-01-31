@@ -42,13 +42,13 @@ public class ProducerWithModuloPartitioner {
             ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, String.valueOf(seq), "this-is-" + String.valueOf(seq));
             producer.send(record, (RecordMetadata recordMetadata, Exception exception) -> {
                 if (exception == null) {
-                    System.out.println("### record metadata received ### \n" +
+                    logger.info("### record metadata received ### \n" +
                             "partition: " + recordMetadata.partition() + "\n" +
                             "offset: " + recordMetadata.offset() + "\n" +
                             "timestamp: " + recordMetadata.timestamp());
                 }
                 if (exception != null) {
-                    System.out.println("exception from broker: " + exception.getMessage());
+                    logger.error("exception from broker: " + exception.getMessage());
                 }
             });
         }
