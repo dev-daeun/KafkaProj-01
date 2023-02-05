@@ -31,6 +31,9 @@ public class SimpleConsumerAutoCommit {
         // consumer group identifier 설정
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group-01");
 
+        // auto commit 설정 (default: auto.commit.interval.ms = 5000, enable.auto.commit = true)
+        props.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "6000");
+
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
         // consumer group 은 여러 개의 토픽 구독이 가능함.
@@ -47,7 +50,11 @@ public class SimpleConsumerAutoCommit {
             }
         });
 
-        // shutdown kafka consumption gracefully...
+        pollAutocommit(consumer);
+
+    }
+
+    private static void pollAutocommit(KafkaConsumer<String, String> consumer) {
         try {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(10000));
@@ -60,6 +67,7 @@ public class SimpleConsumerAutoCommit {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         } catch (WakeupException e) {
             logger.error("wakeup exception has occurred.");
@@ -67,6 +75,5 @@ public class SimpleConsumerAutoCommit {
             logger.info("kafka consumer is closing...");
             consumer.close();
         }
-
     }
 }

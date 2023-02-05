@@ -24,10 +24,18 @@ public class SimpleProducer {
 
         // 메세지 객체 생성하기 (key 타입은 string, value 타입은 string)
         String topic = "simple-topic";
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, "this-is-key", "this-is-value-2");
+
+        for (int i = 0; i < 100; i++) {
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, String.valueOf(i) , "this-is-value " + String.valueOf(i));
+            producer.send(record);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         // 메세지 전송하기
-        producer.send(record);
         producer.close();
     }
 }
