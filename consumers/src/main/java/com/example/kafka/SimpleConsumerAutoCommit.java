@@ -73,6 +73,7 @@ public class SimpleConsumerAutoCommit {
             logger.error("wakeup exception has occurred.");
         } finally {
             logger.info("kafka consumer is closing...");
+            // 컨수머 종료할 때 auto commit 호출됨.
             consumer.close();
         }
     }
